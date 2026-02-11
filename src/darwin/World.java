@@ -7,28 +7,31 @@ package darwin;
 
 public class World {
 	private Matrix<Creature> creatures;
-	
+	private int w,h;
 	/**
 	 * This method creates a new world consisting of width columns and height
 	 * rows, each of which is numbered beginning at 0. A newly created world
 	 * contains no objects.
 	 */
 	public World(int w, int h) {
-		// BE CAREFUL: think about how width/heights translates to row/col in a matrix
+		this.w=w;
+		this.h=h;
+		this.creatures=new Matrix<>(h,w);
 	}
 
 	/**
 	 * Returns the height of the world.
 	 */
 	public int height() {
-		return 0; // FIX
+
+		return h;
 	}
 
 	/**
 	 * Returns the width of the world.
 	 */
 	public int width() {
-		return 0; // FIX
+		return w;
 	}
 
 	/**
@@ -37,7 +40,9 @@ public class World {
 	 * returns true *if* pos is an (x,y) location within the bounds of the board.
 	 */
 	public boolean inRange(Position pos) {
-		return false; // FIX
+		int currentX=pos.getX();
+		int currentY=pos.getY();
+		return (currentX<w && currentX>=0 && currentY<h && currentY>=0);
 	}
 
 	/**
@@ -46,7 +51,10 @@ public class World {
 	 * @throws IllegalArgumentException if pos is not in range
 	 */
 	public void set(Position pos, Creature e) {
-		// FIX
+		if (!inRange(pos)){throw new IllegalArgumentException("Position " + pos + " is out of range");}
+		int currentX=pos.getX();
+		int currentY=pos.getY();
+		creatures.set(currentY,currentX,e);
 	}
 
 	/**
@@ -55,8 +63,10 @@ public class World {
 	 * @throws IllegalArgumentException if pos is not in range
 	 */
 	public Creature get(Position pos) {
-		// BE CAREFUL: think about how x,y translates to row/col in a matrix
-		return null; // FIX
+		if (!inRange(pos)){throw new IllegalArgumentException("Position " + pos + " is out of range");}
+		int currentX=pos.getX();
+		int currentY=pos.getY();
+		return creatures.get(currentY,currentX);
 	}
 
 }
