@@ -23,9 +23,61 @@ public class Species {
 	 * Create a species for the given fileReader. 
 	 */
 	public Species(BufferedReader fileReader) {
-	/*		try {
+			try {
 				
 				// insert code to read from Creatures file here (use readLine() )
+				program = new ArrayList<>();
+				name=fileReader.readLine();
+				speciesChar=name.charAt(0);
+				color=fileReader.readLine();
+				String line;
+				while ((line = fileReader.readLine()) != null) {
+					if (line.isEmpty()) break;
+					String[] parts = line.split("\\s+");
+					int number, address;
+    				switch (parts[0]) {
+					case "hop":
+						number=1;
+						break;
+					case "left":
+						number=2;
+						break;
+					case "right":
+						number=3;
+						break;
+					case "infect":
+						number=4;
+						break;
+					case "ifempty":
+						number=5;
+						break;
+					case "ifwall":
+						number=6;
+						break;
+					case "ifsame":
+						number=7;
+						break;
+					case "ifenemy":
+						number=8;
+						break;
+					case "ifrandom":
+						number=9;
+						break;
+					case "go":
+						number=10;
+						break;
+
+					default:
+						number=0;
+}					
+					if (parts.length>1){
+						program.add(new Instruction(number, Integer.parseInt(parts[1])));
+					}
+					else {program.add(new Instruction(number));}
+					
+				}
+
+				
 			} catch (IOException e) {
 				System.out.println(
 					"Could not read file '"
@@ -33,7 +85,7 @@ public class Species {
 						+ "'");
 				System.exit(1);
 			}
-	*/	
+	
 	}
 
 
@@ -41,28 +93,28 @@ public class Species {
 	* Return the char for the species
 	*/
 	public char getSpeciesChar() {
-		return ' ';		// FIX
+		return speciesChar;		
 	}
 
 	/**
 	 * Return the name of the species.
 	 */
 	public String getName() {
-		return null;    // FIX
+		return name;   
 	}
 
 	/**
 	 * Return the color of the species.
 	 */
 	public String getColor() {
-		return null;    // FIX
+		return color;    
 	}
 
 	/**
 	 * Return the number of instructions in the program.
 	 */
 	public int programSize() {
-		return 0;    // FIX
+		return program.size(); 
 	}
 
 	/**
@@ -71,7 +123,7 @@ public class Species {
 	 * @post returns instruction i of the program.
 	 */
 	public Instruction programStep(int i) {
-		return null;    // FIX
+		return program.get(i-1); 
 	}
 
 	/**
