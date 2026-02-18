@@ -1,7 +1,5 @@
 package darwin;
 
-import java.util.ArrayList;
-import java.util.Random;
 import java.io.*;
 
 /**
@@ -49,6 +47,7 @@ class Darwin {
 	public static void main(String s[]) {
 		Darwin d = new Darwin(s);
 		d.simulate();
+		
 	}
 
 	public void simulate() {
@@ -56,5 +55,28 @@ class Darwin {
 		// don't forget to call pause somewhere in the simulator's loop...
 		// make sure to pause using WorldMap so that TAs can modify pause time
 		// when grading
-	}
-}
+			try {
+			
+			World world = new World(9, 9);
+			WorldMap.createWorldMap(9, 9);
+
+			BufferedReader in = new BufferedReader(new FileReader("./Creatures/" + "Food" + ".txt"));
+			Species s = new Species(in);
+			Position pos = new Position(2, 0);
+			Creature c = new Creature(s, world, pos, Position.EAST);
+
+			in = new BufferedReader(new FileReader("./Creatures/" + "Hop" + ".txt"));
+			Species s2 = new Species(in);
+			Position pos2 = new Position(3, 3);
+			Creature c2 = new Creature(s2, world, pos2, Position.EAST);
+
+			for (int i = 0; i < 5; i++) {
+            c.takeOneTurn();
+			c2.takeOneTurn();
+            WorldMap.pause(300);
+        }
+
+	}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}}
