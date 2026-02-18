@@ -39,7 +39,7 @@ public class Instruction {
 	public static final int GO = 10;
 
 	private int opcode; /** the opcode */
-	private int address; /** the address */
+	private int address=-1; /** the address */
 
 	/**
 	 * Creates a new instruction for operations that do
