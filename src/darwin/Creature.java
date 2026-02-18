@@ -105,11 +105,11 @@ public class Creature {
 						else{
 							adjacentCreature.count = 1;
 						}
+						WorldMap.displaySquare(adjacentCreature.position(), adjacentCreature.myChar, adjacentCreature.direction(), adjacentCreature.myColor);
 					}
-					WorldMap.displaySquare(myPos, myChar, myDir, myColor);
-					WorldMap.displaySquare(adjacentCreature.position(), adjacentCreature.myChar, adjacentCreature.direction(), adjacentCreature.myColor);
+
 				}
-				WorldMap.displaySquare(myPos, myChar, myDir, myColor);
+		
 					
 					
 				break;
