@@ -1,7 +1,5 @@
 package darwin;
 
-import java.util.*;
-
 /**
  * This class represents one creature on the board. Each creature must remember
  * its species, position, direction, and the world in which it is living.
@@ -11,7 +9,13 @@ import java.util.*;
  * fact, you should only update the WorldMap from inside the Creature class.
  */
 public class Creature {
-
+	Species mySpecies;
+	World myWorld;
+	Position myPos;
+	int myDir;
+	int count=1;
+	String myColor;
+	char myChar;
 	/**
 	 * Create a creature of the given species, with the indicated position and
 	 * direction. Note that we also pass in the world-- remember this world, so
@@ -19,42 +23,113 @@ public class Creature {
 	 * when the creature moves.
 	 */
 	public Creature(Species species, World world, Position pos, int dir) {
+		mySpecies=species;
+		myWorld=world;
+		myPos=pos;
+		myDir=dir;
+		myColor=species.getColor().toLowerCase();
+		myChar=species.getSpeciesChar();
+		WorldMap.displaySquare(myPos, myChar, myDir, myColor);
 	}
 
 	/**
 	 * Return the species of the creature.
 	 */
 	public Species species() {
-		return null; // fix
+		return mySpecies; 
 	}
 
 	/**
 	 * Return the current direction of the creature.
 	 */
 	public int direction() {
-		return 0; // fix
+		return myDir; 
 	}
 
 	/**
 	 * Sets the current direction of the creature to the given value 
 	 */
 	public void setDirection(int dir){
-		//fix
+		myDir=dir;
 	}
 
 	/**
 	 * Return the position of the creature.
 	 */
 	public Position position() {
-		return null; // fix
+		return myPos; // fix
 	}
-
 	/**
 	 * Execute steps from the Creature's program
 	 *   starting at step #1
 	 *   continue until a hop, left, right, or infect instruction is executed.
 	 */
 	public void takeOneTurn() {
+		Instruction currentInst = mySpecies.programStep(count);
+		int code = currentInst.getOpcode();
+		count++;
+		int address = currentInst.getAddress();;
+		switch (code){
+			case 1: // hop
+				Position nextStep = myPos.getAdjacent(myDir);
+				if (myWorld.inRange(nextStep) && myWorld.get(nextStep)==null){
+					myWorld.set(myPos, null);
+					myWorld.set(nextStep, this);
+					WorldMap.displaySquare(myPos, ' ', myDir, " ");
+					WorldMap.displaySquare(nextStep, myChar, myDir, myColor);
+					myPos=nextStep;
+				}
+				break;
+
+			case 2: // left
+				myDir=(3+myDir)%4;
+				WorldMap.displaySquare(myPos, myChar, myDir, myColor);
+				break;
+
+			case 3: // right
+				myDir=(myDir+1)%4;
+				WorldMap.displaySquare(myPos, myChar, myDir, myColor);
+				break;
+
+			case 4: // infect
+				
+				if (address>0){
+					// if there is a not null address (n) then make the other creature take over at n-th instruction
+					}
+				break;
+
+			case 5: // ifempty n
+				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}		
+
+				break;
+
+			case 6: // ifwall n
+				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+				break;
+
+			case 7: // ifsame n
+				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+				break;
+
+			case 8: // ifenemy n
+				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+				break;
+
+			case 9: // ifrandom n
+				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+
+				break;
+
+			case 10: // go
+				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+				count=address;
+				break;
+
+			default:
+				count--;
+				break;
+
+		}
 	}
 
 	/**
