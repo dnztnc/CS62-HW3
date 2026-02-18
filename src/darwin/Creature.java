@@ -13,7 +13,7 @@ public class Creature {
 	World myWorld;
 	Position myPos;
 	int myDir;
-	int count=1;
+	public int count=1;
 	String myColor;
 	char myChar;
 	/**
@@ -92,10 +92,26 @@ public class Creature {
 				break;
 
 			case 4: // infect
-				
-				if (address>0){
-					// if there is a not null address (n) then make the other creature take over at n-th instruction
+				Position adjacentPos = myPos.getAdjacent(myDir);
+				if (!adjacentPos.equals(null)){
+					Creature adjacentCreature = myWorld.get(myPos.getAdjacent(myDir));
+					if (!adjacentCreature.species().equals(mySpecies)){
+						adjacentCreature = new Creature(mySpecies, myWorld, adjacentPos, adjacentCreature.direction());
+
+						if (address>0){
+							adjacentCreature.count = address;
+						
+						}
+						else{
+							adjacentCreature.count = 1;
+						}
 					}
+					WorldMap.displaySquare(myPos, myChar, myDir, myColor);
+					WorldMap.displaySquare(adjacentCreature.position(), adjacentCreature.myChar, adjacentCreature.direction(), adjacentCreature.myColor);
+				}
+				WorldMap.displaySquare(myPos, myChar, myDir, myColor);
+					
+					
 				break;
 
 			case 5: // ifempty n
