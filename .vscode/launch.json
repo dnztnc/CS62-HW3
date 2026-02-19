@@ -1,0 +1,24 @@
+{
+    
+    "configurations": [
+        {
+            "type": "java",
+            "name": "AutograderCompTest",
+            "request": "launch",
+            "mainClass": "darwin.AutograderCompTest",
+            "projectName": "CS62-HW3-main_1b87c7de"
+        },
+        {
+            "type": "java",
+            "name": "Darwin",
+            "request": "launch",
+            "mainClass": "darwin.Darwin",
+            "args": [
+                "Food.txt",
+                "Hop.txt", 
+                "Tanaci_Burton.txt"
+            ],
+            "projectName": "CS62-HW3-main_1b87c7de"
+        }
+    ]
+}
