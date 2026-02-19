@@ -21,8 +21,12 @@ import java.io.*;
  * 
  */
 class Darwin {
+	static  String [] testSpecies;
+	static int numSpecies;
 
 	public Darwin(String[] speciesFilenames) {
+		testSpecies=speciesFilenames;
+		numSpecies=testSpecies.length;
 	}
 
 	/**
@@ -44,10 +48,11 @@ class Darwin {
 	 * Darwin(s); before submitting. If you want to use relative filenames for the
 	 * creatures they should be of the form "./Creatures/Hop.txt".
 	 */
-	public static void main(String s[]) {
-		Darwin d = new Darwin(s);
+	public static void main(String[] args) {
+		String [] testSpecies = args;
+		//String [] testSpecies = {"Food.txt","Hop.txt","Flytrap.txt","Rover.txt"};
+		Darwin d = new Darwin(testSpecies);
 		d.simulate();
-		
 	}
 
 	public void simulate() {
@@ -55,28 +60,34 @@ class Darwin {
 		// don't forget to call pause somewhere in the simulator's loop...
 		// make sure to pause using WorldMap so that TAs can modify pause time
 		// when grading
-			try {
-			
-			World world = new World(9, 9);
-			WorldMap.createWorldMap(9, 9);
+		World world = new World(30, 30);
+		WorldMap.createWorldMap(30, 30);
+		Creature[] ourList =  new Creature[10*numSpecies];
+		for (int i = 0; i < 10; i++) {
+		try {
+			int[] dx={0,1,0,1,2};
+			int[] dy={0,0,1,1,0};
+			int j= 0;
+			for (String name : testSpecies) {
+				BufferedReader in = new BufferedReader(new FileReader("./Creatures/" + name));
+				Species s = new Species(in);
+				Position pos = new Position(i+dx[j], i+dy[j]);
+				ourList[numSpecies*i+j] = new Creature(s, world, pos, Position.EAST);
+				j++;
+			}
 
-			BufferedReader in = new BufferedReader(new FileReader("./Creatures/" + "Food" + ".txt"));
-			Species s = new Species(in);
-			Position pos = new Position(2, 0);
-			Creature c = new Creature(s, world, pos, Position.EAST);
 
-			in = new BufferedReader(new FileReader("./Creatures/" + "Hop" + ".txt"));
-			Species s2 = new Species(in);
-			Position pos2 = new Position(3, 3);
-			Creature c2 = new Creature(s2, world, pos2, Position.EAST);
 
-			for (int i = 0; i < 5; i++) {
-            c.takeOneTurn();
-			c2.takeOneTurn();
-            WorldMap.pause(300);
-        }
-
-	}catch (Exception e) {
+        }catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		}
+			for (int i = 0; i < 500; i++) {
+			for (Creature curCreature : ourList) {
+				curCreature.takeOneTurn();
+			}		
+            WorldMap.pause(100);
+			}
+
 	}}
