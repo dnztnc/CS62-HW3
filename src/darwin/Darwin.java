@@ -48,10 +48,10 @@ class Darwin {
 	 * Darwin(s); before submitting. If you want to use relative filenames for the
 	 * creatures they should be of the form "./Creatures/Hop.txt".
 	 */
-	public static void main(String[] args) {
-		String [] testSpecies = args;
-		//String [] testSpecies = {"Food.txt","Hop.txt","Flytrap.txt","Rover.txt"};
-		Darwin d = new Darwin(testSpecies);
+	public static void main(String[] s) {
+		//for testing: String [] testSpecies = args;
+		//for testing: String [] testSpecies = {"Food.txt","Hop.txt","Flytrap.txt","DenizTom.txt"};
+		Darwin d = new Darwin(s);
 		d.simulate();
 	}
 
@@ -63,7 +63,7 @@ class Darwin {
 		World world = new World(30, 30);
 		WorldMap.createWorldMap(30, 30);
 		Creature[] ourList =  new Creature[10*numSpecies];
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 10; i+=1) {
 		try {
 			int[] dx={0,1,0,1,2};
 			int[] dy={0,0,1,1,0};
@@ -71,7 +71,7 @@ class Darwin {
 			for (String name : testSpecies) {
 				BufferedReader in = new BufferedReader(new FileReader("./Creatures/" + name));
 				Species s = new Species(in);
-				Position pos = new Position(i+dx[j], i+dy[j]);
+				Position pos = new Position(2*i+dx[j], i+dy[j]);
 				ourList[numSpecies*i+j] = new Creature(s, world, pos, Position.EAST);
 				j++;
 			}
@@ -87,7 +87,7 @@ class Darwin {
 			for (Creature curCreature : ourList) {
 				curCreature.takeOneTurn();
 			}		
-            WorldMap.pause(100);
+            WorldMap.pause(200);
 			}
 
 	}}
