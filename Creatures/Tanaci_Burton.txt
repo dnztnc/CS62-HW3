@@ -1,0 +1,13 @@
+Tanaci_Burton
+magenta
+ifenemy 8
+hop
+left
+ifrandom 1
+hop
+right
+go 1
+infect
+go 1
+
+Deniz Tanaci and Tom Burton
