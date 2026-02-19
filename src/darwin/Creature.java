@@ -1,5 +1,6 @@
 package darwin;
-
+import java.util.Random;
+// deniz update for tom
 /**
  * This class represents one creature on the board. Each creature must remember
  * its species, position, direction, and the world in which it is living.
@@ -13,7 +14,7 @@ public class Creature {
 	World myWorld;
 	Position myPos;
 	int myDir;
-	public int count=1;
+	int count=1;
 	String myColor;
 	char myChar;
 	/**
@@ -23,6 +24,7 @@ public class Creature {
 	 * when the creature moves.
 	 */
 	public Creature(Species species, World world, Position pos, int dir) {
+		world.set(pos, this);
 		mySpecies=species;
 		myWorld=world;
 		myPos=pos;
@@ -68,7 +70,7 @@ public class Creature {
 		Instruction currentInst = mySpecies.programStep(count);
 		int code = currentInst.getOpcode();
 		count++;
-		int address = currentInst.getAddress();;
+		int address = currentInst.getAddress();
 		switch (code){
 			case 1: // hop
 				Position nextStep = myPos.getAdjacent(myDir);
@@ -93,10 +95,12 @@ public class Creature {
 
 			case 4: // infect
 				Position adjacentPos = myPos.getAdjacent(myDir);
-				if (!adjacentPos.equals(null)){
+				if (myWorld.inRange(adjacentPos) && adjacentPos!=null){
 					Creature adjacentCreature = myWorld.get(myPos.getAdjacent(myDir));
-					if (!adjacentCreature.species().equals(mySpecies)){
-						adjacentCreature = new Creature(mySpecies, myWorld, adjacentPos, adjacentCreature.direction());
+					if (adjacentCreature!=null && !adjacentCreature.species().equals(mySpecies)){
+						adjacentCreature.mySpecies=mySpecies;
+						adjacentCreature.myColor=myColor;
+						adjacentCreature.myChar=myChar;
 
 						if (address>0){
 							adjacentCreature.count = address;
@@ -110,30 +114,50 @@ public class Creature {
 
 				}
 		
-					
-					
 				break;
 
 			case 5: // ifempty n
-				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}		
 
+				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+
+				nextStep = myPos.getAdjacent(myDir);
+				if (myWorld.inRange(nextStep) && myWorld.get(nextStep)==null){
+					count=address;
+				}
 				break;
 
 			case 6: // ifwall n
 				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+				if (!myWorld.inRange(myPos.getAdjacent(myDir))){
+					count=address;
+				}
 				break;
 
-			case 7: // ifsame n
+			case 7: // ifsame n 
 				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+				if (myWorld.inRange(myPos.getAdjacent(myDir))){
+				if (myWorld.get(myPos.getAdjacent(myDir)) != null){
+					if (mySpecies==(myWorld.get(myPos.getAdjacent(myDir)).species())){
+					count=address;
+				}}}
 				break;
 
 			case 8: // ifenemy n
 				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
+				if (myWorld.inRange(myPos.getAdjacent(myDir))){
+				{if(myWorld.get(myPos.getAdjacent(myDir)) != null){
+					if (mySpecies!=(myWorld.get(myPos.getAdjacent(myDir)).species())){
+					count=address;
+				}}}}
+
 				break;
 
 			case 9: // ifrandom n
 				if (address==(-1)){throw new IllegalArgumentException("Missing address!");}
-
+				Random rand = new Random();
+				if (rand.nextInt(2) == 0) {
+					count=address;
+				}
 				break;
 
 			case 10: // go
